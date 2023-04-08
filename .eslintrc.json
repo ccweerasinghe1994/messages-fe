@@ -1,0 +1,55 @@
+{
+	"env": {
+		"browser": true,
+		"es2021": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:react-hooks/recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:@typescript-eslint/recommended-requiring-type-checking",
+		"plugin:react/jsx-runtime",
+		"plugin:prettier/recommended"
+	],
+	"overrides": [],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module",
+		"project": true,
+		"tsconfigRootDir": "."
+	},
+	"plugins": ["react", "@typescript-eslint", "promise"],
+	"rules": {
+		"prettier/prettier": [
+			"error",
+			{
+				"singleQuote": true,
+				"endOfLine": "lf",
+				"semi": true,
+				"useTabs": true,
+				"bracketSpacing": true,
+				"bracketSameLine": true
+			}
+		],
+		/* this is related to promise" */
+		"promise/always-return": "error",
+		"promise/no-return-wrap": "error",
+		"promise/param-names": "error",
+		"promise/catch-or-return": "error",
+		"promise/no-native": "off",
+		"promise/no-nesting": "warn",
+		"promise/no-promise-in-callback": "warn",
+		"promise/no-callback-in-promise": "warn",
+		"promise/avoid-new": "warn",
+		"promise/no-new-statics": "error",
+		"promise/no-return-in-finally": "warn",
+		"promise/valid-params": "warn"
+	},
+	"settings": {
+		"react": {
+			"version": "18.2.0"
+		}
+	}
+}
