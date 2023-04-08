@@ -1,7 +1,14 @@
+import { Button } from '@mui/material';
 import { FC } from 'react';
 
 const LoginPage: FC = () => {
-	return <h1>Login Page</h1>;
+	return (
+		<>
+			<div>
+				<Button variant="contained">Sign Up</Button>
+			</div>
+		</>
+	);
 };
 
 export default LoginPage;
