@@ -1,88 +1,81 @@
-import { Button, TextField, Typography } from '@mui/material';
-import { FC, useState, useEffect } from 'react';
-import Grid from '@mui/material/Unstable_Grid2';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import ErrorPage from '../../Components/Error/Error.component';
+import Input from '../../Components/Input/Input.component';
+import Button from '../../Components/Button/Button.component';
 
-const Item = styled(Paper)(({ theme }) => ({
-	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-	...theme.typography.body2,
-	padding: theme.spacing(1),
-	textAlign: 'center',
-	color: theme.palette.text.secondary,
-}));
 const LoginPage: FC = () => {
-	const [email, setEmail] = useState<string>('');
+	const [email, setEmail] = useState<string | undefined>(undefined);
 	const [emailError, setEmailError] = useState<boolean>(false);
-	const [password, setPassword] = useState<string>('');
+	const [password, setPassword] = useState<string | undefined>(undefined);
 	const [passwordError, setPasswordError] = useState<boolean>(false);
-	const validateEmail = (email: string) => {
+	console.log('');
+
+	const validateEmail = useCallback((email: string) => {
 		const re = /\S+@\S+\.\S+/;
-		return re.test(email);
-	};
+		return !re.test(email);
+	}, []);
 
-	const checkPassword = (password: string) => {
+	const checkPassword = useCallback((password: string) => {
 		const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-		return re.test(password);
-	};
+		return !re.test(password);
+	}, []);
 
 	useEffect(() => {
+		if (email === undefined) return;
 		setEmailError(validateEmail(email));
-	}, [email]);
+	}, [email, validateEmail]);
 
 	useEffect(() => {
+		if (password === undefined) return;
 		setPasswordError(checkPassword(password));
-	}, [password]);
+	}, [password, checkPassword]);
+
+	const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		if (name === 'email') {
+			setEmail(value);
+		} else if (name === 'password') {
+			setPassword(value);
+		}
+	}, []);
+	const disabled = useMemo(() => {
+		return emailError || passwordError;
+	}, [emailError, passwordError]);
 
 	return (
-		<Grid container justifyContent={'center'}>
-			<Grid xs={6}>
-				<Item>
-					<Typography variant="h3" gutterBottom>
-						Sign Up To MESSAGES
-					</Typography>
-					<TextField
-						fullWidth
-						required
-						id="filled-basic"
-						label="email"
-						variant="filled"
-						type="email"
+		<div className="container mx-auto mt-10">
+			<form className="border border-blue-200 sm:p-5 md:p-10 ">
+				<h3 className="font-semi-bold text-xl text-center mb-10 text-slate-500">
+					Sign Up To The Application
+				</h3>
+				<div className="mb-10">
+					<Input
+						name="email"
+						type="text"
+						placeholder="Email"
 						value={email}
-						placeholder="sample@abc.com"
-						onChange={(e) => setEmail(e.target.value)}
-						error={!emailError}
-						helperText={!emailError ? 'Invalid email' : ''}
-						sx={{ mt: 3, mb: 2 }}
+						onChange={handleChange}
+						className="w-[50%]"
 					/>
-					<TextField
-						fullWidth
-						required
-						id="filled-basic"
-						label="password"
-						variant="filled"
+					{emailError && <ErrorPage>Invalid email</ErrorPage>}
+				</div>
+				<div className="mb-10">
+					<Input
+						name="password"
 						type="password"
+						placeholder="Password"
 						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						error={!passwordError}
-						sx={{ mt: 3, mb: 2 }}
-						helperText={
-							!passwordError
-								? 'password must only contain numbers and characters and length must be 8 or higher'
-								: ''
-						}
+						onChange={handleChange}
+						className="w-[50%]"
 					/>
+					{passwordError && <ErrorPage>Invalid password</ErrorPage>}
+				</div>
 
-					<Button
-						fullWidth
-						variant="contained"
-						disabled={!emailError || !passwordError}
-						sx={{ mt: 3, mb: 2 }}>
-						Sign Up
-					</Button>
-				</Item>
-			</Grid>
-		</Grid>
+				<Button type="submit" disabled={disabled}>
+					Login
+				</Button>
+			</form>
+		</div>
 	);
 };
 
