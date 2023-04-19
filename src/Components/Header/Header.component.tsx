@@ -5,12 +5,10 @@ import { Routes } from '../../main';
 import { MdOutlineLogin } from 'react-icons/md';
 
 const LinkRoutesStyles = classes(
-	'bg-blue-500 px-4 py-1 hover:bg-blue-700 rounded'
+	'bg-blue-500 px-4 py-1 hover:bg-blue-700 rounded text-white'
 );
 const commonStyles = classes('px-3 py-1');
-const navLinkStyles = classes(
-	'flex justify-between mx-auto text-xl text-white pt-6 ml-5'
-);
+const navLinkStyles = classes('flex justify-between mx-auto text-xl pt-6 ml-5');
 
 const Header: FC = () => {
 	const { pathname } = useLocation();
@@ -37,7 +35,7 @@ const Header: FC = () => {
 				<Link
 					className={isLogin ? LinkRoutesStyles : commonStyles}
 					to={'/login'}>
-					<MdOutlineLogin className={'inline mr-2'} />
+					<MdOutlineLogin className={'inline mr-2 text-white'} />
 					Login
 				</Link>
 			</div>
