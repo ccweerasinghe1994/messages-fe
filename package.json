@@ -22,7 +22,7 @@
 		"react-router-dom": "^6.10.0"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^17.5.1",
+		"@commitlint/cli": "^17.6.1",
 		"@commitlint/config-conventional": "^17.6.1",
 		"@microsoft/eslint-formatter-sarif": "^3.0.0",
 		"@testing-library/jest-dom": "^5.16.5",
