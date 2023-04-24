@@ -24,7 +24,6 @@ export default defineConfig({
 			provider: 'c8',
 			extension: ['.ts', '.tsx'],
 			all: true,
-			// include: ['**/src/features/**'],
 			branches: 50,
 			statements: 50,
 			functions: 50,
