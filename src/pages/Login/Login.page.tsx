@@ -1,4 +1,11 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+	ChangeEvent,
+	FC,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import ErrorPage from '../../Components/Error/Error.component';
 import Input from '../../Components/Input/Input.component';
 import Button from '../../Components/Button/Button.component';
@@ -30,7 +37,7 @@ const LoginPage: FC = () => {
 		setPasswordError(checkPassword(password));
 	}, [password, checkPassword]);
 
-	const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		if (name === 'email') {
 			setEmail(value);
@@ -43,7 +50,7 @@ const LoginPage: FC = () => {
 	}, [emailError, passwordError]);
 
 	return (
-		<div className="container mx-auto mt-10">
+		<div className="w-1/2 mx-auto mt-10">
 			<form className="border border-blue-200 sm:p-5 md:p-10 ">
 				<h3 className="font-semi-bold text-xl text-center mb-10 text-slate-500">
 					Sign Up To The Application
