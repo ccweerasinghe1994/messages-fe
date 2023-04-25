@@ -28,6 +28,7 @@ const LoginPage: FC = () => {
 	const validateEmail = useCallback(emailCheck, []);
 	const checkPassword = useCallback(passwordCheck, []);
 	const navigate = useNavigate();
+
 	useEffect(() => {
 		if (email === undefined) return;
 		setEmailError(validateEmail(email));
@@ -61,10 +62,9 @@ const LoginPage: FC = () => {
 
 	useEffect(() => {
 		if (!isLoading && isSuccess) {
-			console.log('running');
 			navigate('/home');
 		}
-	}, [isLoading, isSuccess]);
+	}, [isLoading, isSuccess, navigate]);
 	return (
 		<div className="w-1/2 mx-auto mt-10">
 			<form
