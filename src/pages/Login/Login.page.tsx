@@ -10,16 +10,17 @@ import {
 import ErrorPage from '../../Components/Error/Error.component';
 import Input from '../../Components/Input/Input.component';
 import Button from '../../Components/Button/Button.component';
-import { useSignInMutation } from '../../store';
+import { setSignInUser, useSignInMutation } from '../../store';
 import { emailCheck, passwordCheck } from '../../util/common.util';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../store/hooks';
 
 const LoginPage: FC = () => {
 	const [email, setEmail] = useState<string | undefined>(undefined);
 	const [emailError, setEmailError] = useState<boolean>(false);
 	const [password, setPassword] = useState<string | undefined>(undefined);
 	const [passwordError, setPasswordError] = useState<boolean>(false);
-
+	const dispatch = useAppDispatch();
 	const [signIn, signInResponse] = useSignInMutation();
 
 	const { data, isError, error, isLoading, isSuccess } = signInResponse;
@@ -62,9 +63,10 @@ const LoginPage: FC = () => {
 
 	useEffect(() => {
 		if (!isLoading && isSuccess) {
+			dispatch(setSignInUser(data));
 			navigate('/home');
 		}
-	}, [isLoading, isSuccess, navigate]);
+	}, [isLoading, isSuccess, navigate, dispatch, data]);
 	return (
 		<div className="w-1/2 mx-auto mt-10">
 			<form

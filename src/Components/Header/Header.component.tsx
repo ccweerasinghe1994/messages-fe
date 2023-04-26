@@ -12,8 +12,9 @@ const commonStyles = classes('px-3 py-1');
 const navLinkStyles = classes('flex justify-between mx-auto text-xl pt-6 ml-5');
 
 const Header: FC = () => {
-	const user = useAppSelector((state) => state.user);
+	const user = useAppSelector((state) => state.loggedInUser);
 	console.log(user);
+
 	const { pathname } = useLocation();
 	const isHome = pathname === Routes.Home || pathname === '/';
 	const isAbout = pathname === Routes.About;
@@ -38,7 +39,7 @@ const Header: FC = () => {
 					<Link
 						className={isLogin ? LinkRoutesStyles : commonStyles}
 						to={'/login'}>
-						<MdOutlineLogin className={'inline mr-2 text-white'} />
+						<MdOutlineLogin className={'inline mr-2 '} />
 						Login
 					</Link>
 				</div>

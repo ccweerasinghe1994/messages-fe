@@ -8,6 +8,7 @@ import HomePage from './pages/Home/Home.page';
 import NotFound from './pages/NotFound/NotFound.page';
 import AboutPage from './pages/About/About.page';
 import LoginPage from './pages/Login/Login.page';
+import ErrorBoundary from './ErrorBoundry';
 
 export enum Routes {
 	Home = '/home',
@@ -30,7 +31,11 @@ export const CustomRouter = createBrowserRouter([
 			},
 			{
 				path: Routes.Login,
-				element: <LoginPage />,
+				element: (
+					<ErrorBoundary fallback={<p>Something went wrong</p>}>
+						<LoginPage />
+					</ErrorBoundary>
+				),
 			},
 		],
 	},
