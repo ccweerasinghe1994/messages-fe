@@ -7,7 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import HomePage from './pages/Home/Home.page';
 import NotFound from './pages/NotFound/NotFound.page';
 import AboutPage from './pages/About/About.page';
-import LoginPage from './pages/Login/Login.page';
+import { LoginPage } from './pages/Login/Login.page';
 import ErrorBoundary from './ErrorBoundry';
 
 export enum Routes {

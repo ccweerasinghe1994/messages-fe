@@ -10,12 +10,13 @@ import {
 import ErrorPage from '../../Components/Error/Error.component';
 import Input from '../../Components/Input/Input.component';
 import Button from '../../Components/Button/Button.component';
-import { setSignInUser, useSignInMutation } from '../../store';
 import { emailCheck, passwordCheck } from '../../util/common.util';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../store/hooks';
+import { useSignInMutation } from '../../store/api/user/user.api';
+import { setSignInUser } from '../../store/slices/user.slice';
 
-const LoginPage: FC = () => {
+export const LoginPage: FC = () => {
 	const [email, setEmail] = useState<string | undefined>(undefined);
 	const [emailError, setEmailError] = useState<boolean>(false);
 	const [password, setPassword] = useState<string | undefined>(undefined);
@@ -118,5 +119,3 @@ const LoginPage: FC = () => {
 		</div>
 	);
 };
-
-export default LoginPage;
