@@ -1,10 +1,11 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import classes from 'classnames';
 import { Routes } from '../../main';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { BsFillPersonCheckFill, BsFillPersonXFill } from 'react-icons/bs';
 import { logout } from '../../store/slices/user.slice';
+import { useSignOutMutation } from '../../store/api/user/user.api';
 
 const LinkRoutesStyles = classes(
 	'bg-blue-500 px-4 py-1 hover:bg-blue-700 rounded text-white'
@@ -16,12 +17,18 @@ export const Header: FC = () => {
 	const { user, isAuthenticated } = useAppSelector(
 		(state) => state.loggedInUser
 	);
+	const [signOut] = useSignOutMutation();
 	const dispatch = useAppDispatch();
 
 	const { pathname } = useLocation();
 	const isHome = pathname === Routes.Home || pathname === '/';
 	const isAbout = pathname === Routes.About;
 	const isLogin = pathname === Routes.Login;
+
+	const handleLogout = useCallback(() => {
+		void signOut({});
+		dispatch(logout());
+	}, [dispatch, signOut]);
 	return (
 		<nav className={navLinkStyles}>
 			<div className={'py-1'}>
@@ -60,9 +67,7 @@ export const Header: FC = () => {
 						'flex mr-5 border-blue-500 border rounded hover:border-blue-100'
 					}
 					to={'/login'}
-					onClick={() => {
-						dispatch(logout());
-					}}>
+					onClick={handleLogout}>
 					Logout
 				</Link>
 			)}
