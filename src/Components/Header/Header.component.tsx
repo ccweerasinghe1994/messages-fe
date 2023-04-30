@@ -1,8 +1,11 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import classes from 'classnames';
 import { Routes } from '../../main';
-import { MdOutlineLogin } from 'react-icons/md';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { BsFillPersonCheckFill, BsFillPersonXFill } from 'react-icons/bs';
+import { logout } from '../../store/slices/user.slice';
+import { useSignOutMutation } from '../../store/api/user/user.api';
 
 const LinkRoutesStyles = classes(
 	'bg-blue-500 px-4 py-1 hover:bg-blue-700 rounded text-white'
@@ -10,12 +13,22 @@ const LinkRoutesStyles = classes(
 const commonStyles = classes('px-3 py-1');
 const navLinkStyles = classes('flex justify-between mx-auto text-xl pt-6 ml-5');
 
-const Header: FC = () => {
+export const Header: FC = () => {
+	const { user, isAuthenticated } = useAppSelector(
+		(state) => state.loggedInUser
+	);
+	const [signOut] = useSignOutMutation();
+	const dispatch = useAppDispatch();
+
 	const { pathname } = useLocation();
 	const isHome = pathname === Routes.Home || pathname === '/';
 	const isAbout = pathname === Routes.About;
 	const isLogin = pathname === Routes.Login;
 
+	const handleLogout = useCallback(() => {
+		void signOut({});
+		dispatch(logout());
+	}, [dispatch, signOut]);
 	return (
 		<nav className={navLinkStyles}>
 			<div className={'py-1'}>
@@ -28,19 +41,36 @@ const Header: FC = () => {
 					About
 				</Link>
 			</div>
-			<div
-				className={
-					'flex mr-5 border-blue-500 border rounded hover:border-blue-100'
-				}>
+			{!isAuthenticated ? (
+				<div
+					className={
+						'flex mr-5 border-blue-500 border rounded hover:border-blue-100'
+					}>
+					<Link
+						className={isLogin ? LinkRoutesStyles : commonStyles}
+						to={'/login'}>
+						<BsFillPersonXFill className={'inline mr-2 text-red-500 '} />
+						Login
+					</Link>
+				</div>
+			) : (
+				<span className={'px-3 py-1 flex items-center'}>
+					<BsFillPersonCheckFill
+						className={' text-2xl inline mr-2 text-green-500'}
+					/>
+					<span>{user?.email?.split('@')[0]}</span>
+				</span>
+			)}
+			{isAuthenticated && (
 				<Link
-					className={isLogin ? LinkRoutesStyles : commonStyles}
-					to={'/login'}>
-					<MdOutlineLogin className={'inline mr-2 text-white'} />
-					Login
+					className={
+						'flex mr-5 border-blue-500 border rounded hover:border-blue-100'
+					}
+					to={'/login'}
+					onClick={handleLogout}>
+					Logout
 				</Link>
-			</div>
+			)}
 		</nav>
 	);
 };
-
-export default Header;

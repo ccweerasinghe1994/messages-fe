@@ -1,6 +1,7 @@
 import {
 	ChangeEvent,
 	FC,
+	FormEvent,
 	useCallback,
 	useEffect,
 	useMemo,
@@ -9,23 +10,26 @@ import {
 import ErrorPage from '../../Components/Error/Error.component';
 import Input from '../../Components/Input/Input.component';
 import Button from '../../Components/Button/Button.component';
+import { emailCheck, passwordCheck } from '../../util/common.util';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../store/hooks';
+import { useSignInMutation } from '../../store/api/user/user.api';
+import { setSignInUser } from '../../store/slices/user.slice';
 
-const LoginPage: FC = () => {
+export const LoginPage: FC = () => {
 	const [email, setEmail] = useState<string | undefined>(undefined);
 	const [emailError, setEmailError] = useState<boolean>(false);
 	const [password, setPassword] = useState<string | undefined>(undefined);
 	const [passwordError, setPasswordError] = useState<boolean>(false);
-	console.log('');
+	const dispatch = useAppDispatch();
+	const [signIn, signInResponse] = useSignInMutation();
 
-	const validateEmail = useCallback((email: string) => {
-		const re = /\S+@\S+\.\S+/;
-		return !re.test(email);
-	}, []);
+	const { data, isError, error, isLoading, isSuccess } = signInResponse;
+	const errorMessage = error as IResError<Partial<IRes>>;
 
-	const checkPassword = useCallback((password: string) => {
-		const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-		return !re.test(password);
-	}, []);
+	const validateEmail = useCallback(emailCheck, []);
+	const checkPassword = useCallback(passwordCheck, []);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (email === undefined) return;
@@ -49,9 +53,26 @@ const LoginPage: FC = () => {
 		return emailError || passwordError;
 	}, [emailError, passwordError]);
 
+	const handleSignIn = useCallback(() => {
+		if (email === undefined || password === undefined) return;
+		void signIn({ email, password });
+	}, [email, password, signIn]);
+
+	const handleSubmit = useCallback((e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+	}, []);
+
+	useEffect(() => {
+		if (!isLoading && isSuccess) {
+			dispatch(setSignInUser(data));
+			navigate('/home');
+		}
+	}, [isLoading, isSuccess, navigate, dispatch, data]);
 	return (
 		<div className="w-1/2 mx-auto mt-10">
-			<form className="border border-blue-200 sm:p-5 md:p-10 ">
+			<form
+				onSubmit={handleSubmit}
+				className="border border-blue-200 sm:p-5 md:p-10 ">
 				<h3 className="font-semi-bold text-xl text-center mb-10 text-slate-500">
 					Sign Up To The Application
 				</h3>
@@ -78,12 +99,23 @@ const LoginPage: FC = () => {
 					{passwordError && <ErrorPage>Invalid password</ErrorPage>}
 				</div>
 
-				<Button type="submit" disabled={disabled}>
+				<Button
+					loading={isLoading}
+					type="submit"
+					disabled={disabled}
+					onClick={handleSignIn}>
 					Login
 				</Button>
+				{isError && <ErrorPage>{errorMessage.data.message}</ErrorPage>}
+				{isSuccess && (
+					<div
+						className={
+							'border border-green-900 text-green-500 p-2 mb-4 mt-2 w-fit bg-green-100 rounded-lg'
+						}>
+						{data.email} is successfully created
+					</div>
+				)}
 			</form>
 		</div>
 	);
 };
-
-export default LoginPage;
