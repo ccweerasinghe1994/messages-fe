@@ -7,6 +7,7 @@ interface IInputProps {
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	name: string;
 	className?: string;
+	required?: boolean;
 }
 
 const Input: FC<IInputProps> = ({
@@ -16,9 +17,10 @@ const Input: FC<IInputProps> = ({
 	type,
 	name,
 	className,
+	required,
 }) => {
 	const inputClasses = classNames(
-		'w-full h-10 border-2 border-gray-300 rounded-md px-2 focus:outline-none focus:border-blue-500',
+		'h-12 rounded-full pl-4 focus:outline-none focus:border-blue-500 w-full',
 		className
 	);
 
@@ -30,6 +32,7 @@ const Input: FC<IInputProps> = ({
 			placeholder={placeholder}
 			value={value}
 			onChange={onChange}
+			required={required}
 		/>
 	);
 };
