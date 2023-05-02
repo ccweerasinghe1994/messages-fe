@@ -1,12 +1,12 @@
 import { FC, ReactNode } from 'react';
 import { VscLoading } from 'react-icons/vsc';
-
+import classNames from 'classnames';
 interface IButton {
 	children: ReactNode;
 	onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 	className?: string;
 	type: 'button' | 'submit' | 'reset';
-	disabled: boolean;
+	disabled?: boolean;
 	loading?: boolean;
 }
 
@@ -15,12 +15,14 @@ const Button: FC<IButton> = ({
 	type,
 	disabled,
 	loading,
+	className,
 	...props
 }) => {
+	const classNamesList = classNames(' ', className);
 	return (
 		<button
 			type={type}
-			className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded disabled:bg-slate-400 flex gap-2 items-center "
+			className={classNamesList}
 			disabled={disabled}
 			{...props}>
 			{loading ? <VscLoading className={'animate-spin'} /> : ''}
